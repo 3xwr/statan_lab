@@ -8,13 +8,17 @@ def show_graphs(relative_bool=False):
 #Полигон частот
     if relative_bool:
         text = " относительных "
+        text2 = "Относительная"
     else:
         text = " абсолютных "
+        text2 = "Абсолютная"
     y,edges = np.histogram(data_list, boundaries, density=relative_bool) #  note only two arguments, _ missing
     centers = 0.5*(edges[1:]+ edges[:-1])
 
     plt.plot(centers,y,'-*')      # other options '--'  '-^'
     plt.title('Полигон' + text + 'частот')
+    plt.xlabel('Возраст работников банка')
+    plt.ylabel(text2 + 'частота')
     plt.show()
 
     #Гистограмма 
@@ -24,12 +28,16 @@ def show_graphs(relative_bool=False):
 
     plt.hist(x, y, facecolor='blue', alpha=0.5, histtype='bar', ec='black', density=relative_bool)
     plt.title('Гистограмма' + text + 'частот')
+    plt.xlabel('Возраст работников банка')
+    plt.ylabel(text2 + 'частота')
     plt.show()
 
     #Эмпирическая функция 
 
     plt.hist(x, y, facecolor='blue', alpha=0.5, histtype='bar', ec='black', density=1, cumulative=True)
     plt.title('Эмпирическая функция' + text + 'частот')
+    plt.xlabel('Возраст работников банка')
+    plt.ylabel('Значение функции')
     plt.show()
 
     #Кумулята
@@ -39,6 +47,8 @@ def show_graphs(relative_bool=False):
     cum = np.cumsum(y)
     plt.plot(centers,cum,'-*')      # other options '--'  '-^'
     plt.title('Кумулята'+ text + 'частот')
+    plt.xlabel('Возраст работников банка')
+    plt.ylabel('Накопленная ' + text2 + 'частота')
     plt.show()
 
 dataset_length = 91
@@ -63,15 +73,16 @@ print('\nВариационный ряд:\n')
 var_dict = dict(Counter(data_list))
 print(var_dict)
 
-k = 1 + math.floor(math.log(dataset_length,2))
+k = 1 + math.floor(3.322*math.log(dataset_length,10))
+print(k)
 
 x_max = data_list[dataset_length-1]
 x_min = data_list[0]
 
-h = (x_max-x_min)/k
-h = int(h)
+h = round(((x_max-x_min)/k),1)
+print(h)
 
-x_0 = x_min - int(h/2)
+x_0 = x_min
 x_z = x_0
 
 interval_dict_absolute = {}
