@@ -45,7 +45,7 @@ solo_list = []
 
 for elem in range(0,k):
     counter = 0
-    x_top = x_0 + h
+    x_top = round((x_0 + h),2)
     temp_list = [x_0, x_top]
     solo_list.append(x_0)
     #interval_dict[temp_list] = 0
