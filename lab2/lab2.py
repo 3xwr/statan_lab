@@ -230,3 +230,6 @@ print("Медиана: ", round(median,2))
 #Расчет коэфф вариации
 koef_var = (kv_otkl/com_avg)*100
 print("Коэффициент вариации: ", round(koef_var,2), "%")
+
+sko_fixed = round(math.sqrt(total_var*dataset_length/(dataset_length-1)),2)
+print(sko_fixed)

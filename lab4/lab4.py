@@ -13,7 +13,6 @@ with open("bank.csv", "r") as csv_file:
     next(csv_reader, None)
     for lines in csv_reader:
       if len(data_list) < 91:
-          print(lines[9])
           data_list.append(int(lines[9]))
           vec1.append(int(lines[0]))
 
@@ -57,7 +56,6 @@ for elem in range(0,k):
 
     for i in range(0, len(data_list)):
         if data_list[i] <= x_top and data_list[i] > x_0:
-            print(data_list[i], 'added for x_top =', x_top, 'x_0 =', x_0)
             counter = counter + 1
     
 
@@ -248,7 +246,7 @@ print("Медиана: ", round(median,2))
 koef_var = (kv_otkl/com_avg)*100
 print("Коэффициент вариации: ", round(koef_var,2), "%")
 
-#Корелляция
+#Таблица двумерного интервального вариационного ряда
 k = 1 + math.floor(3.322*math.log(dataset_length,10))
 
 vec1.sort()
@@ -257,13 +255,9 @@ x_max = vec1[dataset_length-1]
 x_min = vec1[0]
 
 h = round(((x_max-x_min)/k),1)
-print(h)
 
 x_0 = x_min
 x_z = x_0
-
-interval_dict_absolute = {}
-interval_dict_relative = {}
 
 int_list2 = []
 solo_list = []
@@ -273,14 +267,6 @@ for elem in range(0,k):
     x_top = round((x_0 + h),2)
     temp_list = [x_0, x_top]
     solo_list.append(x_0)
-    #interval_dict[temp_list] = 0
-
-    for i in range(0, len(data_list)):
-        if vec1[i] < x_top and vec1[i] >= x_0:
-            counter = counter + 1
-    
-    interval_dict_absolute[str(temp_list)] = counter
-    interval_dict_relative[str(temp_list)] = counter/dataset_length
 
     int_list2.append(temp_list)
 
@@ -288,20 +274,6 @@ for elem in range(0,k):
 
 solo_list.append(x_top)
 
-
-int_pos1 = {}
-int_pos2 = {}
-
-for i in range(7):
-    int_pos1[i] = int_list[i]
-    int_pos2[i] = int_list2[i]
-
-
-print(int_list)
-print(int_list2)
-
-print(int_pos1)
-print(int_pos2)
 
 corr_dict = {}
 ind = 0
@@ -327,23 +299,57 @@ for key, value in corr_dict.items():
                 x_pos = j
                 matrix[y_pos][x_pos]+=1
             
-
-
 matrix[0][0]
+print("\nТаблица двумерного интервального ряда:")
 print(matrix)
 
-sum = 0
+#Корелляционная таблица
+mid_age = []
+for i in range(len(int_list2)):
+    mid_age.append(round((((int_list2[i][0]+int_list2[i][1])/2)),2))
+print(mid_age)
 
+mid_day_of_hire = []
+for i in range(len(int_list)):
+    mid_day_of_hire.append(round((((int_list[i][0]+int_list[i][1])/2)),2))
+print(mid_day_of_hire)
+
+#Статистическая оценка корреляционного момента
+cor_sum = 0
 for i in range(7):
     for j in range(7):
-        sum+=matrix[i][j]
+        cor_sum+=matrix[i][j]*(mid_age[i]-41.66)*(mid_day_of_hire[j]-15.12)
 
-print(sum)
+stat_cor = cor_sum/dataset_length
+print("Статистическая оценка корреляционного момента: ", round(stat_cor,3))
+sko_fixed = round(math.sqrt(total_var*dataset_length/(dataset_length-1)),2)
+sko_age_fixed = 11.1
+r = round((stat_cor/(sko_age_fixed*sko_fixed)),3)
+print("Коэффициент корреляции: ", r)
 
+#Доверительный интервал при точности 0.95
+print('\nДоверительный интервал при точности 0.95:')
+left_side = math.tanh(math.atanh(r)-(1.95996635682/math.sqrt(dataset_length-3)))
+right_side = math.tanh(math.atanh(r)+(1.95996635682/math.sqrt(dataset_length-3)))
 
+print('('+str(round(left_side,3))+','+str(round(right_side,3))+')')
 
+#Доверительный интервал при точности 0.99
+print('\nДоверительный интервал при точности 0.99:')
+left_side = math.tanh(math.atanh(r)-(2.57583422011/math.sqrt(dataset_length-3)))
+right_side = math.tanh(math.atanh(r)+(2.57583422011/math.sqrt(dataset_length-3)))
 
-            
+print('('+str(round(left_side,3))+','+str(round(right_side,3))+')')
 
+#Нулевая гипотеза
+T_nabl = r*math.sqrt(dataset_length-2)/math.sqrt(1-pow(r,2))
+print(T_nabl)
 
+T_krit = 1.95996635682
 
+if(abs(T_nabl) < abs(T_krit)):
+    print('|'+str(T_nabl)+'|', "<",'|'+ str(T_krit)+ '|')
+    print("Нет оснований для отвержения нулевой гипотезы")
+else:
+    print('|'+str(T_nabl)+'|', ">",'|'+ str(T_krit)+ '|')
+    print("Есть основания для отвержения нулевой гипотезы")
