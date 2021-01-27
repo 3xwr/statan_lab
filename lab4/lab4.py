@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from collections import Counter
 
-dataset_length = 91
+dataset_length = 94
 data_list = []
 
 vec1 = []
@@ -12,7 +12,7 @@ with open("bank.csv", "r") as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=';')
     next(csv_reader, None)
     for lines in csv_reader:
-      if len(data_list) < 91:
+      if len(data_list) < 94:
           data_list.append(int(lines[9]))
           vec1.append(int(lines[0]))
 

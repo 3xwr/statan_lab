@@ -5,14 +5,14 @@ import matplotlib.pyplot as plt
 from scipy.special import erf
 from collections import Counter
 
-dataset_length = 91
+dataset_length = 94
 data_list = []
 
 with open("bank.csv", "r") as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=';')
     next(csv_reader, None)
     for lines in csv_reader:
-      if len(data_list) < 91:
+      if len(data_list) < 94:
           print(lines[0])
           data_list.append(int(lines[0]))
 
@@ -113,7 +113,7 @@ print('s - ', s)
 koef_Stud = 1.99
 
 #Расчет точности оценки
-epsilon = round((koef_Stud*s/math.sqrt(91)),3)
+epsilon = round((koef_Stud*s/math.sqrt(94)),3)
 print('eps', epsilon)
 
 #Расчет доверительного интервала
@@ -126,7 +126,7 @@ print('('+str(com_avg-epsilon)+','+str(com_avg+epsilon)+')')
 koef_Stud = 2.64
 
 #Расчет точности оценки
-epsilon = round((koef_Stud*s/math.sqrt(91)),3)
+epsilon = round((koef_Stud*s/math.sqrt(94)),3)
 print('eps', epsilon)
 
 #Расчет доверительного интервала
@@ -136,7 +136,7 @@ print('ИЛИ')
 print('('+str(com_avg-epsilon)+','+str(com_avg+epsilon)+')')
 
 #Расчет доверительного интервала СКО
-#Коэффициент q для надежности 0.95 и объема выборки 91
+#Коэффициент q для надежности 0.95 и объема выборки 94
 q = 0.151
 print('\nРасчет доверительного интервала СКО при надежности 0.95:')
 left_term = s*(1-q)
@@ -146,7 +146,7 @@ print('ИЛИ')
 print('('+str(round((s-s*q),3))+','+str(round((s+s*q),3))+')')
 
 #Расчет доверительного интервала СКО
-#Коэффициент q для надежности 0.95 и объема выборки 91
+#Коэффициент q для надежности 0.95 и объема выборки 94
 q = 0.211
 print('\nРасчет доверительного интервала СКО при надежности 0.99:')
 left_term = s*(1-q)
